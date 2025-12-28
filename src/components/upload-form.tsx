@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useUploadPdf } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Upload, FileText, Loader2 } from "lucide-react";
 
 export function UploadForm() {
@@ -65,87 +64,77 @@ export function UploadForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-6">
-      <Card
+    <form onSubmit={handleSubmit} className="w-full space-y-4">
+      <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={`
-          relative border-2 border-dashed transition-all duration-300 cursor-pointer
+          relative border border-dashed rounded-lg transition-colors cursor-pointer
           ${isDragging 
-            ? "border-primary bg-primary/5 scale-[1.02]" 
-            : "border-border hover:border-muted-foreground"
+            ? "border-brand-purple/50 bg-brand-purple/5" 
+            : "border-border hover:border-brand-purple/30"
           }
-          ${file ? "border-primary/50 bg-card" : ""}
+          ${file ? "border-brand-green/50 bg-brand-green/5" : ""}
         `}
       >
-        <CardContent className="p-12">
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileSelect}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={handleFileSelect}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
 
+        <div className="p-8 text-center">
           {file ? (
-            <div className="space-y-2 text-center">
-              <div className="w-16 h-16 mx-auto bg-primary/10 rounded-xl flex items-center justify-center">
-                <FileText className="w-8 h-8 text-primary" />
-              </div>
-              <p className="font-medium">{file.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {(file.size / 1024 / 1024).toFixed(2)} MB
+            <div className="space-y-1">
+              <FileText className="w-5 h-5 mx-auto text-brand-green" />
+              <p className="text-sm font-medium truncate">{file.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {(file.size / 1024 / 1024).toFixed(1)} MB
               </p>
             </div>
           ) : (
-            <div className="space-y-4 text-center">
-              <div className="w-16 h-16 mx-auto bg-muted rounded-xl flex items-center justify-center">
-                <Upload className="w-8 h-8 text-muted-foreground" />
-              </div>
-              <div>
-                <p className="font-medium">Drop your PDF here</p>
-                <p className="text-sm text-muted-foreground mt-1">or click to browse</p>
-              </div>
+            <div className="space-y-1">
+              <Upload className="w-5 h-5 mx-auto text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                Arrastra un PDF o haz clic
+              </p>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {file && (
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-2">
-              Book Title
-            </label>
-            <Input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter a title for your book"
-            />
-          </div>
+        <div className="space-y-3">
+          <Input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Título del libro"
+            className="text-sm"
+          />
 
           <Button
             type="submit"
             disabled={uploadMutation.isPending}
-            className="w-full"
-            size="lg"
+            className="w-full bg-brand-purple hover:bg-brand-purple/90"
+            size="sm"
           >
             {uploadMutation.isPending ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Processing...
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Procesando...
               </span>
             ) : (
-              "Transform Book"
+              "Transformar"
             )}
           </Button>
         </div>
       )}
 
       {uploadMutation.isError && (
-        <p className="text-destructive text-center text-sm">
+        <p className="text-brand-red text-center text-xs">
           {uploadMutation.error.message}
         </p>
       )}

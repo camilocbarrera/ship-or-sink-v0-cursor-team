@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
 :root {
+  /* Brand colors */
+  --brand-white: #f4efed;
+  --brand-black: #1c1c1c;
+  --brand-red: #d2423e;
+  --brand-pink: #e276b1;
+  --brand-yellow: #f0c453;
+  --brand-green: #65b489;
+  --brand-blue: #91cfee;
+  --brand-purple: #6e59fb;
+
   --background: #f4efed;
   --foreground: #1c1c1c;
   --card: #ffffff;
@@ -12,7 +22,7 @@
   --secondary: #91cfee;
   --secondary-foreground: #1c1c1c;
   --muted: #e8e0dd;
-  --muted-foreground: #1c1c1c;
+  --muted-foreground: #6b6360;
   --accent: #e276b1;
   --accent-foreground: #1c1c1c;
   --destructive: #d2423e;
@@ -20,6 +30,8 @@
   --border: #d4c9c4;
   --input: #d4c9c4;
   --ring: #6e59fb;
+  --success: #65b489;
+  --warning: #f0c453;
   --chart-1: #6e59fb;
   --chart-2: #91cfee;
   --chart-3: #e276b1;
@@ -61,6 +73,16 @@
 }
 
 .dark {
+  /* Brand colors */
+  --brand-white: #f4efed;
+  --brand-black: #1c1c1c;
+  --brand-red: #d2423e;
+  --brand-pink: #e276b1;
+  --brand-yellow: #f0c453;
+  --brand-green: #65b489;
+  --brand-blue: #91cfee;
+  --brand-purple: #6e59fb;
+
   --background: #1c1c1c;
   --foreground: #f4efed;
   --card: #2a2a2a;
@@ -72,7 +94,7 @@
   --secondary: #91cfee;
   --secondary-foreground: #1c1c1c;
   --muted: #3a3a3a;
-  --muted-foreground: #f4efed;
+  --muted-foreground: #a0a0a0;
   --accent: #e276b1;
   --accent-foreground: #1c1c1c;
   --destructive: #d2423e;
@@ -80,6 +102,8 @@
   --border: #3a3a3a;
   --input: #3a3a3a;
   --ring: #6e59fb;
+  --success: #65b489;
+  --warning: #f0c453;
   --chart-1: #6e59fb;
   --chart-2: #91cfee;
   --chart-3: #e276b1;
@@ -121,6 +145,16 @@
 }
 
 @theme inline {
+  /* Brand colors */
+  --color-brand-white: var(--brand-white);
+  --color-brand-black: var(--brand-black);
+  --color-brand-red: var(--brand-red);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-green: var(--brand-green);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-purple: var(--brand-purple);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -140,6 +174,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -186,4 +222,25 @@ body {
   50% {
     transform: translateY(-10px);
   }
+}
+
+/* View Transitions API for smooth theme switching */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* Disable default transitions during view transition to prevent double animations */
+.dark,
+:root {
+  view-transition-name: root;
 }

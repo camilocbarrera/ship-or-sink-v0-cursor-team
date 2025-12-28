@@ -1,7 +1,7 @@
 import { task, logger } from "@trigger.dev/sdk/v3";
 import { db, chapters, books } from "@/db";
 import { eq, sql } from "drizzle-orm";
-import { generateObject, generateText } from "ai";
+import { generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { generateImage } from "./generate-image";
@@ -12,8 +12,8 @@ export interface ProcessChapterPayload {
 }
 
 const analogySchema = z.object({
-  analogy: z.string().describe("A clear, visual analogy that explains the chapter's main concepts"),
-  imagePrompt: z.string().describe("A detailed prompt for generating an image that represents this analogy"),
+  analogy: z.string().describe("Una analogía clara y visual que explica los conceptos principales del capítulo en español"),
+  imagePrompt: z.string().describe("A detailed prompt in English for generating an image that represents this analogy"),
 });
 
 export const processChapter = task({
@@ -39,31 +39,32 @@ export const processChapter = task({
     }
 
     try {
-      // Generate analogy and image prompt
+      // Generate analogy in Spanish and image prompt in English
       const { object } = await generateObject({
         model: openai("gpt-4o-mini"),
         schema: analogySchema,
-        prompt: `You are an expert at making complex topics understandable through visual analogies.
+        prompt: `Eres un experto en hacer que temas complejos sean comprensibles a través de analogías visuales.
 
-Analyze this chapter and create:
-1. A clear, memorable analogy that explains the main concepts in simple terms
-2. A detailed image prompt that visually represents this analogy
+Analiza este capítulo y crea:
+1. Una analogía clara y memorable EN ESPAÑOL que explique los conceptos principales en términos simples
+2. Un prompt detallado EN INGLÉS para generar una imagen que represente visualmente esta analogía
 
-Chapter Title: ${chapter.title}
+Título del Capítulo: ${chapter.title}
 
-Chapter Content:
+Contenido del Capítulo:
 ${chapter.originalText.substring(0, 15000)}
 
-Create an analogy that:
-- Uses everyday objects or situations people can relate to
-- Captures the essence of the main ideas
-- Is visual and memorable
+Crea una analogía que:
+- Use objetos o situaciones cotidianas con las que las personas puedan identificarse
+- Capture la esencia de las ideas principales
+- Sea visual y memorable
+- Esté escrita completamente en español
 
-For the image prompt:
-- Be specific about visual elements, colors, composition
-- Describe a scene that represents the analogy
-- Keep it artistic and conceptual, not literal text
-- Style: modern, minimalist, educational illustration`,
+Para el prompt de imagen (en inglés):
+- Sé específico sobre elementos visuales, colores, composición
+- Describe una escena que represente la analogía
+- Mantenlo artístico y conceptual, sin texto literal
+- Estilo: moderno, minimalista, ilustración educativa`,
       });
 
       logger.info("Analogy generated", {
@@ -131,4 +132,3 @@ For the image prompt:
     }
   },
 });
-

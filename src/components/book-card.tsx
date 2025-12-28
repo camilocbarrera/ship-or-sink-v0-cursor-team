@@ -2,88 +2,61 @@
 
 import Link from "next/link";
 import type { Book } from "@/db/schema";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { ChevronRight, Loader2, Check, AlertCircle, Clock } from "lucide-react";
 
 interface BookCardProps {
   book: Book;
 }
 
-const statusConfig = {
-  pending: {
-    label: "Queued",
-    variant: "secondary" as const,
-  },
-  processing: {
-    label: "Processing",
-    variant: "default" as const,
-  },
-  completed: {
-    label: "Ready",
-    variant: "default" as const,
-  },
-  failed: {
-    label: "Failed",
-    variant: "destructive" as const,
-  },
-};
-
 export function BookCard({ book }: BookCardProps) {
-  const status = statusConfig[book.status];
   const progress = book.totalChapters > 0
     ? Math.round((book.processedChapters / book.totalChapters) * 100)
     : 0;
 
   return (
-    <Link href={`/book/${book.id}`} className="group block">
-      <Card className="h-full transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              <BookOpen className="w-6 h-6 text-primary" />
-            </div>
-            <Badge variant={status.variant}>{status.label}</Badge>
-          </div>
+    <Link 
+      href={`/book/${book.id}`} 
+      className="group flex items-center gap-3 p-3 rounded-lg border border-border/30 hover:border-border/60 hover:bg-muted/30 transition-colors"
+    >
+      {/* Status indicator with brand colors */}
+      <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
+        {book.status === "processing" ? (
+          <Loader2 className="w-4 h-4 text-brand-purple animate-spin" />
+        ) : book.status === "completed" ? (
+          <Check className="w-4 h-4 text-brand-green" />
+        ) : book.status === "failed" ? (
+          <AlertCircle className="w-4 h-4 text-brand-red" />
+        ) : (
+          <Clock className="w-4 h-4 text-brand-yellow" />
+        )}
+      </div>
 
-          <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-sm font-medium truncate group-hover:text-foreground transition-colors">
             {book.title}
           </h3>
+          <ChevronRight className="w-3 h-3 text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+        </div>
 
-          <p className="text-sm text-muted-foreground mb-4">
-            {book.totalChapters > 0
-              ? `${book.totalChapters} chapter${book.totalChapters !== 1 ? "s" : ""}`
-              : "Analyzing..."}
-          </p>
-
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-xs text-muted-foreground">
+            {book.totalChapters > 0 ? `${book.totalChapters} cap.` : "..."}
+          </span>
+          
           {book.status === "processing" && book.totalChapters > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Progress</span>
-                <span className="font-mono">{progress}%</span>
+            <>
+              <span className="text-xs text-muted-foreground/30">·</span>
+              <div className="flex items-center gap-1.5 flex-1 max-w-[100px]">
+                <Progress value={progress} className="h-0.5 flex-1" />
+                <span className="text-xs text-muted-foreground tabular-nums">{progress}%</span>
               </div>
-              <Progress value={progress} className="h-1.5" />
-            </div>
+            </>
           )}
-        </CardContent>
-
-        <CardFooter className="px-6 pb-6 pt-0">
-          <div className="w-full flex items-center justify-between text-xs text-muted-foreground">
-            <span>
-              {new Date(book.createdAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-            <span className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-              View
-              <ChevronRight className="w-4 h-4" />
-            </span>
-          </div>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </Link>
   );
 }

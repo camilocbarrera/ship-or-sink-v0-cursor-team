@@ -65,10 +65,10 @@ export function ProcessingStatus({ bookId }: ProcessingStatusProps) {
           </div>
           <div>
             <h3 className="font-semibold">
-              {data.status === "pending" ? "Queued for processing" : "Processing your book"}
+              {data.status === "pending" ? "En cola para procesar" : "Procesando tu libro"}
             </h3>
             <p className="text-sm text-muted-foreground">
-              {data.processedChapters} of {data.totalChapters || "?"} chapters completed
+              {data.processedChapters} de {data.totalChapters || "?"} capítulos completados
             </p>
           </div>
         </div>
@@ -86,7 +86,7 @@ export function ProcessingStatus({ bookId }: ProcessingStatusProps) {
               >
                 <StatusIcon status={chapter.status} />
                 <span className={chapter.status === "completed" ? "text-muted-foreground" : ""}>
-                  Chapter {chapter.chapterNumber}: {chapter.title}
+                  Capítulo {chapter.chapterNumber}: {chapter.title}
                 </span>
               </div>
             ))}

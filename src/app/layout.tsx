@@ -21,35 +21,41 @@ const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "Simple | Transform Complex Text into Visual Stories",
-  description: "Upload any dense PDF—technical books, essays, non-fiction—and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+  title: "Simple | Transforma Texto Complejo en Historias Visuales",
+  description: "Sube cualquier PDF denso—libros técnicos, ensayos, no ficción—y deja que la IA transforme cada capítulo en analogías memorables con hermosas imágenes conceptuales.",
   icons: {
     icon: "/Simple_FAV-ICON.svg",
   },
   openGraph: {
-    title: "Simple | Transform Complex Text into Visual Stories",
-    description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+    title: "Simple | Transforma Texto Complejo en Historias Visuales",
+    description: "Sube cualquier PDF y deja que la IA transforme cada capítulo en analogías memorables con hermosas imágenes conceptuales.",
     url: baseUrl,
     siteName: "Simple",
-    images: [
-      {
-        url: "/Simple_OG.svg",
-        width: 1200,
-        height: 630,
-        alt: "Simple - AI-Powered Book Visualization",
-      },
-    ],
     type: "website",
-    locale: "en_US",
+    locale: "es_ES",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Simple | Transform Complex Text into Visual Stories",
-    description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
-    images: ["/Simple_OG.svg"],
+    title: "Simple | Transforma Texto Complejo en Historias Visuales",
+    description: "Sube cualquier PDF y deja que la IA transforme cada capítulo en analogías memorables con hermosas imágenes conceptuales.",
     creator: "@trysimple",
   },
 };
+
+// Script to prevent flash of wrong theme
+const themeScript = `
+  (function() {
+    try {
+      var stored = localStorage.getItem('theme-storage');
+      if (stored) {
+        var parsed = JSON.parse(stored);
+        if (parsed.state && parsed.state.theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    } catch (e) {}
+  })();
+`;
 
 export default function RootLayout({
   children,
@@ -57,7 +63,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
