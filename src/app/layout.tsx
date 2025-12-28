@@ -13,7 +13,14 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://www.trysimple.dev";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Simple | Transform Complex Text into Visual Stories",
   description: "Upload any dense PDF—technical books, essays, non-fiction—and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
   icons: {
@@ -22,6 +29,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Simple | Transform Complex Text into Visual Stories",
     description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+    url: baseUrl,
+    siteName: "Simple",
     images: [
       {
         url: "/Simple_OG.svg",
@@ -31,12 +40,14 @@ export const metadata: Metadata = {
       },
     ],
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "Simple | Transform Complex Text into Visual Stories",
     description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
     images: ["/Simple_OG.svg"],
+    creator: "@trysimple",
   },
 };
 
