@@ -14,8 +14,30 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Visualize Books | Transform Complex Text into Images",
-  description: "Transform dense PDFs into visual learning experiences with AI-generated conceptual images",
+  title: "Simple | Transform Complex Text into Visual Stories",
+  description: "Upload any dense PDF—technical books, essays, non-fiction—and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+  icons: {
+    icon: "/Simple_FAV-ICON.svg",
+  },
+  openGraph: {
+    title: "Simple | Transform Complex Text into Visual Stories",
+    description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+    images: [
+      {
+        url: "/Simple_OG.svg",
+        width: 1200,
+        height: 630,
+        alt: "Simple - AI-Powered Book Visualization",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Simple | Transform Complex Text into Visual Stories",
+    description: "Upload any dense PDF and let AI transform each chapter into memorable analogies with beautiful conceptual images.",
+    images: ["/Simple_OG.svg"],
+  },
 };
 
 export default function RootLayout({

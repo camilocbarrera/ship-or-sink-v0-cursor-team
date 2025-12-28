@@ -3,7 +3,7 @@
 import { use } from "react";
 import Link from "next/link";
 import { useBook } from "@/lib/queries";
-import { ChapterReader } from "@/components/chapter-reader";
+import { StickyChapterReader } from "@/components/sticky-chapter-reader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -73,44 +73,35 @@ export default function BookPage({ params }: BookPageProps) {
   const { book, chapters } = data;
 
   return (
-    <main className="min-h-screen">
-      <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto border-b border-border">
-        <Link href="/library" className="text-xl font-bold text-primary">
-          Visualize Books
-        </Link>
-        <Button variant="ghost" asChild>
-          <Link href="/library">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Library
+    <main className="min-h-screen bg-background">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="flex items-center justify-between p-4 sm:p-6 max-w-7xl mx-auto">
+          <Link href="/library" className="text-lg sm:text-xl font-bold text-primary">
+            Visualize Books
           </Link>
-        </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/library">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Back to Library</span>
+              <span className="sm:hidden">Back</span>
+            </Link>
+          </Button>
+        </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">{book.title}</h1>
-              <p className="text-muted-foreground">
-                {chapters.length} chapter{chapters.length !== 1 ? "s" : ""}
-              </p>
-            </div>
+      {chapters.length === 0 ? (
+        <div className="pt-24 pb-12">
+          <div className="max-w-4xl mx-auto px-6">
+            <Card>
+              <CardContent className="py-12 text-center">
+                <p className="text-muted-foreground">No chapters available yet</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-
-        {chapters.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground">No chapters available yet</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <ChapterReader chapters={chapters} />
-        )}
-      </div>
+      ) : (
+        <StickyChapterReader chapters={chapters} bookTitle={book.title} />
+      )}
     </main>
   );
 }
