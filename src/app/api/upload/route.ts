@@ -4,7 +4,17 @@ import { db, books } from "@/db";
 import { tasks } from "@trigger.dev/sdk/v3";
 import type { processPdf } from "@/trigger/process-pdf";
 
+// Temporarily disabled while we optimize performance
+const UPLOADS_DISABLED = true;
+
 export async function POST(request: NextRequest) {
+  if (UPLOADS_DISABLED) {
+    return NextResponse.json(
+      { error: "Uploads temporarily disabled. We're improving platform performance." },
+      { status: 503 }
+    );
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
